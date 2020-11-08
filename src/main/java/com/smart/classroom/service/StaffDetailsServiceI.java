@@ -1,0 +1,10 @@
+package com.smart.classroom.service;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+public interface StaffDetailsServiceI extends UserDetailsService {
+
+	public UserDetails loadUserByUsername(String staffName) throws UsernameNotFoundException;
+}
