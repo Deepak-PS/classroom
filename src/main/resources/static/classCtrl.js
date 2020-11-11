@@ -1,32 +1,28 @@
 /**
  * 
  */
-$(document).ready(function() {
+var app = angular.module('smartClass', []);
 
-	$.ajax({
-		type: "GET",
-		url: "http://localhost:8080/welcomeData",
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		},
-		success: function(data) {
-			$("#notifications").text(data.message);
-		}
-	});
+app.controller('classCtrl', function($scope, $http) {
 
-	$('#send').click(function() {
-		$.ajax({
-			type: "POST",
-			url: "http://localhost:8080/note",
-			data: JSON.stringify({ "title": $('#title').val(), "body": $('#body').val() }),
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			success: function() {
+	$scope.init = function() {
+		$http.get("http://localhost:8080/welcomeData")
+			.then(function(response) {
+				$scope.notifications = response.data.message;
+			}, function(error) {
+				console.log(error);
+			});
+	}
+	$scope.init();
+
+	$scope.send = function() {
+		var formData = JSON.stringify({ "title": $scope.title, "body": $scope.body });
+		$http.post("http://localhost:8080/note", formData)
+			.then(function() {
 				alert("Success!");
-			}
-		});
-	});
+			}, function(error) {
+				console.log(error);
+			});
+
+	};
 });

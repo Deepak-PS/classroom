@@ -1,31 +1,28 @@
 /**
  * 
  */
-$(document).ready(function() {
+var app = angular.module('smartClass', []);
 
-	$.ajax({
-		type: "GET",
-		url: "http://localhost:8080/welcomeData",
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		},
-		success: function(data) {
-			$("#notifications").text(data.message);
-		}
-	});
+app.controller('classCtrl', function($scope, $http) {
 
-	$.ajax({
-		type: "GET",
-		url: "http://localhost:8080/get",
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		},
-		success: function(data) {
-			for (x in data) {
-				$("#nList").append("<ul style='display: inline-block;'><li> Title: " + data[x].title + "</li><li> Body: " + data[x].body + "</li></ul");
-			}
-		}
-	});
+	$scope.init = function() {
+		$http.get("http://localhost:8080/welcomeData")
+			.then(function(response) {
+				$scope.notifications = response.data.message;
+			}, function(error) {
+				console.log(error);
+			});
+	}
+
+	$scope.load = function() {
+		$http.get("http://localhost:8080/get")
+			.then(function(response) {
+				$scope.nList = response.data;
+			}, function(error) {
+				console.log(error);
+			});
+	}
+
+	$scope.init();
+	$scope.load();
 });
